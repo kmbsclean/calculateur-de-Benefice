@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+        .calculator {
+            font-family: 'Arial', sans-serif;
+            border: 1px solid #e0e0e0;
+            padding: 20px;
+            border-radius: 10px;
+            max-width: 100%;
+            margin: 20px auto;
+            box-sizing: border-box;
+            width: 90%;
+            background-color: #ffffff;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+        }
+
+        h3 {
+            color: #2c3e50;
+            text-align: center;
+            margin: 0 0 25px 0;
+            font-size: 1.5em;
+            font-weight: 600;
+        }
+
+        .input-group {
+            margin-bottom: 20px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 500;
+            color: #555;
+            font-size: 0.95em;
+        }
+
+        input[type="number"] {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #ddd;
+            border-radius: 6px;
+            font-size: 16px;
+            box-sizing: border-box;
+            transition: border-color 0.3s;
+        }
+
+        input[type="number"]:focus {
+            border-color: #3498db;
+            outline: none;
+            box-shadow: 0 0 0 2px rgba(52, 152, 219, 0.2);
+        }
+
+        button {
+            width: 100%;
+            background-color: #27ae60;
+            color: white;
+            border: none;
+            padding: 14px;
+            border-radius: 6px;
+            font-size: 16px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: background-color 0.3s;
+            margin-top: 10px;
+        }
+
+        button:hover {
+            background-color: #219653;
+        }
+
+        #results {
+            margin-top: 25px;
+            padding: 15px;
+            background-color: #f8f9fa;
+            border-radius: 6px;
+            border-left: 4px solid #27ae60;
+        }
+
+        #results div {
+            margin-bottom: 10px;
+            display: flex;
+            justify-content: space-between;
+        }
+
+        #results div:last-child {
+            margin-bottom: 0;
+        }
+
+        .result-label {
+            color: #555;
+        }
+
+        .result-value {
+            font-weight: 600;
+            color: #2c3e50;
+        }
+
+        @media (min-width: 500px) {
+            .calculator {
+                width: 450px;
+            }
+            
+            .input-group {
+                display: flex;
+                align-items: center;
+            }
+            
+            .input-group label {
+                width: 180px;
+                margin-bottom: 0;
+                margin-right: 15px;
+            }
+            
+            .input-group input {
+                width: 120px;
+            }
+            
+            button {
+                width: auto;
+                padding: 12px 24px;
+                display: block;
+                margin-left: auto;
+                margin-right: auto;
+            }
+        }
+
+        @media (min-width: 768px) {
+            .calculator {
+                width: 500px;
+                padding: 30px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="calculator">
+        <h3>Calculateur de Rentabilité</h3>
+        
+        <div class="input-group">
+            <label for="cost">Coût de production (FCFA/L):</label>
+            <input type="number" id="cost" value="1136">
+        </div>
+
+        <div class="input-group">
+            <label for="price">Prix de vente (FCFA/L):</label>
+            <input type="number" id="price" value="3500">
+        </div>
+
+        <div class="input-group">
+            <label for="volume">Volume mensuel (L):</label>
+            <input type="number" id="volume" value="50">
+        </div>
+
+        <button onclick="calculateProfit()">Calculer</button>
+
+        <div id="results">
+            <div>
+                <span class="result-label">Marge unitaire:</span>
+                <span id="unit-profit" class="result-value">2,364</span>
+                <span class="result-value">FCFA</span>
+            </div>
+            <div>
+                <span class="result-label">Profit mensuel:</span>
+                <span id="monthly-profit" class="result-value">118,200</span>
+                <span class="result-value">FCFA</span>
+            </div>
+            <div>
+                <span class="result-label">Marge:</span>
+                <span id="margin" class="result-value">208</span>
+                <span class="result-value">%</span>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function calculateProfit() {
+            const cost = parseFloat(document.getElementById("cost").value) || 0;
+            const price = parseFloat(document.getElementById("price").value) || 0;
+            const volume = parseFloat(document.getElementById("volume").value) || 0;
+
+            const unitProfit = price - cost;
+            const monthlyProfit = unitProfit * volume;
+            const margin = cost > 0 ? ((unitProfit / cost) * 100).toFixed(0) : 0;
+
+            // Formatage des nombres avec séparateur de milliers
+            document.getElementById("unit-profit").innerText = unitProfit.toLocaleString();
+            document.getElementById("monthly-profit").innerText = monthlyProfit.toLocaleString();
+            document.getElementById("margin").innerText = margin;
+        }
+        
+        // Calcul initial
+        calculateProfit();
+
+        // Écouteurs pour recalcul automatique lors de la modification
+        document.getElementById("cost").addEventListener("input", calculateProfit);
+        document.getElementById("price").addEventListener("input", calculateProfit);
+        document.getElementById("volume").addEventListener("input", calculateProfit);
+    </script>
+</body>
+</html>
